@@ -6,6 +6,8 @@ from django.template.loader import render_to_string
 from django.http import HttpResponseRedirect
 from app_utils.select_lists import *
 from django.urls import path, re_path
+from django.utils.html import format_html
+
 
 class MessageAdmin(admin.ModelAdmin):
 
@@ -41,20 +43,20 @@ class MessageAdmin(admin.ModelAdmin):
         
     def send_message_link(self, obj):
         if obj.sent == 1:
-            return u"<span class='label label-info'>Queued for Sending</span>"
+            return format_html("<span class='label label-info'>Queued for Sending</span>")
         elif obj.sent == 2:
-            return u"<span class='label label-success'>Sent</span>"
+            return format_html("<span class='label label-success'>Sent</span>")
         else:
-            return u"<a href='%d/send_message'>%s</a>" % (obj.id, "Send Message &raquo;")
+            return format_html("<a href='%d/send_message'>%s</a>" % (obj.id, "Send Message &raquo;"))
     send_message_link.short_description = ""
     send_message_link.allow_tags = True
     
     def edit_message_link(self, obj):
         if not obj.sent == 0:
-            return u"<span class='label label-info'>Edit Locked</span>"
-        return u"<a href='%d/'>%s</a>" % (obj.id, "Edit")
-    edit_message_link.short_description = ""
-    edit_message_link.allow_tags = True
+            return format_html("<span class='label label-info'>Edit Locked</span>")
+        return format_html("<a href='%d/'>%s</a>" % (obj.id, "Edit"))
+    #edit_message_link.short_description = ""
+    #edit_message_link.allow_tags = True
     
     def get_urls(self):
 
@@ -115,20 +117,17 @@ class EventAdmin(admin.ModelAdmin):
         
     def send_notification_link(self, obj):
         if obj.notified == 1:
-            return u"<span class='label label-info'>Queued for Notification</span>"
+            return format_html("<span class='label label-info'>Queued for Notification</span>")
         elif obj.notified == 2:
-            return u"<span class='label label-success'>Sent</span>"
+            return format_html("<span class='label label-success'>Sent</span>")
         else:
-            return u"<a href='%d/send_notification'>%s</a>" % (obj.id, "Send Notification &raquo;")
-    send_notification_link.short_description = ""
-    send_notification_link.allow_tags = True
+            return format_html("<a href='%d/send_notification'>%s</a>" % (obj.id, "Send Notification &raquo;"))
+    
     
     def edit_message_link(self, obj):
         if not obj.notified == 0:
-            return u"<span class='label label-info'>Edit Locked</span>"
-        return u"<a href='%d/'>%s</a>" % (obj.id, "Edit")
-    edit_message_link.short_description = ""
-    edit_message_link.allow_tags = True
+            return format_html("<span class='label label-info'>Edit Locked</span>")
+        return format_html("<a href='%d/'>%s</a>" % (obj.id, "Edit"))
     
     def get_urls(self):
 
@@ -173,8 +172,8 @@ class SchoolVideosAdmin(admin.ModelAdmin):
     
     def publish_video_link(self, obj):
         if obj.is_published == 1:
-            return u"<span class='label label-info'>Published</span>"
-        return u"<a href='%d/publish_video'>%s</a>" % (obj.id, "Publish Video")
+            return format_html("<span class='label label-info'>Published</span>")
+        return format_html("<a href='%d/publish_video'>%s</a>" % (obj.id, "Publish Video"))
     publish_video_link.short_description = ""
     publish_video_link.allow_tags = True
     
@@ -239,8 +238,8 @@ class SchoolFeedAdmin(admin.ModelAdmin):
     
     def publish_feed_link(self, obj):
         if obj.is_published == 1:
-            return u"<span class='label label-info'>Published</span>"
-        return u"<a href='%d/publish_feed'>%s</a>" % (obj.id, "Publish")
+            return format_html("<span class='label label-info'>Published</span>")
+        return format_html("<a href='%d/publish_feed'>%s</a>" % (obj.id, "Publish"))
     publish_feed_link.short_description = ""
     publish_feed_link.allow_tags = True
     

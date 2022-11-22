@@ -11,6 +11,7 @@ from django.contrib import admin, messages
 from app_utils.select_lists import *
 
 from django.urls import path, re_path
+from django.utils.html import format_html
 
 from app_utils.list_filters import SectionListFilter, ClassesListFilter, \
     ClassesListFilter, AcademicYearListFilter, SubjectsListFilter
@@ -40,14 +41,12 @@ class SchoolAdmin(admin.ModelAdmin):
     
     def school_logo_inline(self, obj):
         if obj.school_logo:
-            return render_to_string('thumbnailx90.html', {
+            return format_html(render_to_string('thumbnailx90.html', {
                 'photo': obj.school_logo
-            })
-    school_logo_inline.short_description = "School Logo"
-    school_logo_inline.allow_tags = False
+            }))
     
     def edit_school_link(self, obj):
-        return """
+        return format_html("""
             <div class='dropdown'>
               <a class='btn btn-default dropdown-toggle' data-toggle='dropdown'>Actions
               <span class='caret'></span></a>
@@ -60,14 +59,10 @@ class SchoolAdmin(admin.ModelAdmin):
                 </li>
               </ul>
             </div>
-        """ %(obj.id, obj.name, obj.id)
-    edit_school_link.short_description = 'Actions'
-    edit_school_link.allow_tags = True
+        """ %(obj.id, obj.name, obj.id))
     
     def school_detail_view_link(self, obj):
-        return u"<a href='%d/school_detail_view' data-toggle='modal' class='modal-click' data-target='.full-content-slider', data-title='%s'>%s</a>" % (obj.id, obj.name, obj.code)
-    school_detail_view_link.short_description = 'School Code'
-    school_detail_view_link.allow_tags = True
+        return format_html("<a href='%d/school_detail_view' data-toggle='modal' class='modal-click' data-target='.full-content-slider', data-title='%s'>%s</a>" % (obj.id, obj.name, obj.code))
     
     
     def get_queryset(self, request):
@@ -320,14 +315,11 @@ class SyllabusAdmin(admin.ModelAdmin):
         return super(SyllabusAdmin, self).formfield_for_foreignkey(db_field, request=request, **kwargs)
     
     def view_syllabus(self, obj):
-        return u"<a class='btn btn-default' href='../syllabustopic/?q=&class_id=%s&subject_id=%s'><i class='icon-th'></i> View Syllabus</a>" % (obj.syllabus_class.id, obj.subject.id)
-    view_syllabus.short_description = 'Actions'
-    view_syllabus.allow_tags = True
+        return format_html("<a class='btn btn-default' href='../syllabustopic/?q=&class_id=%s&subject_id=%s'><i class='icon-th'></i> View Syllabus</a>" % (obj.syllabus_class.id, obj.subject.id))
     
     def syllabus_detail_view_link(self, obj):
-        return u"<a href='../syllabustopic/?q=&subject_id=%s'>%s</a>" % (obj.subject.id, obj.syllabus_class)
-    syllabus_detail_view_link.short_description = "Syllabus Topics"
-    syllabus_detail_view_link.allow_tags = True
+        return format_html("<a href='../syllabustopic/?q=&subject_id=%s'>%s</a>" % (obj.subject.id, obj.syllabus_class))
+
     
     """inlines = (
         SyllabusTopicsInline,

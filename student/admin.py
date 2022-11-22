@@ -26,6 +26,7 @@ from app_utils.list_filters import SectionListFilter, \
     AcademicYearListFilter  
 
 from django.urls import path, re_path
+from django.utils.html import format_html
 
 class StudentAdmin(admin.ModelAdmin):
     
@@ -79,9 +80,7 @@ class StudentAdmin(admin.ModelAdmin):
     student_photo_inline.short_description = "Photo"
     
     def student_names(self, obj):
-        return u"%s %s %s" % (obj.first_name, obj.middle_name, obj.last_name)
-    student_names.short_description = 'Student Names'
-    student_names.allow_tags = True
+        return format_html("%s %s %s" % (obj.first_name, obj.middle_name, obj.last_name))
     
     def edit_student_link(self, obj):
         return """
@@ -105,12 +104,9 @@ class StudentAdmin(admin.ModelAdmin):
     edit_student_link.allow_tags = True
     
     def student_detail_view_link(self, obj):
-        return u"<a href='%d/student_detail_view' data-toggle='modal' class='modal-click' data-target='.full-content-slider' data-title='%s %s %s'>%s</a>" % (obj.id, obj.first_name, obj.middle_name, obj.last_name, obj.registration_number)
-    student_detail_view_link.short_description = "Reg. Number"
-    student_detail_view_link.allow_tags = True
+        return format_html("<a href='%d/student_detail_view' data-toggle='modal' class='modal-click' data-target='.full-content-slider' data-title='%s %s %s'>%s</a>" % (obj.id, obj.first_name, obj.middle_name, obj.last_name, obj.registration_number))
     
     def get_urls(self):
-
 
         def wrap(view):
             def wrapper(*args, **kwargs):

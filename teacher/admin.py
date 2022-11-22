@@ -9,6 +9,7 @@ from app_utils import generate_code
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 from django.urls import path, re_path
+from django.utils.html import format_html
 
 class TeacherForm(forms.ModelForm):
 
@@ -87,7 +88,7 @@ class TeacherAdmin(admin.ModelAdmin):
     teacher_logo_inline.allow_tags = False
     
     def edit_teacher_link(self, obj):
-        return """
+        return format_html("""
             <div class='dropdown'>
               <a class='btn btn-default dropdown-toggle' data-toggle='dropdown'>Actions
               <span class='caret'></span></a>
@@ -100,14 +101,10 @@ class TeacherAdmin(admin.ModelAdmin):
                 </li>
               </ul>
             </div>
-        """ %(obj.id, obj.first_name, obj.last_name, obj.id)
-    edit_teacher_link.short_description = 'Actions'
-    edit_teacher_link.allow_tags = True
+        """ %(obj.id, obj.first_name, obj.last_name, obj.id))
     
     def teacher_detail_view_link(self, obj):
-        return u"<a href='%d/school_detail_view' data-toggle='modal' class='modal-click' data-target='.full-content-slider', data-title='%s %s'>%s %s</a>" % (obj.id, obj.first_name, obj.last_name, obj.first_name, obj.last_name)
-    teacher_detail_view_link.short_description = "Teacher's Names"
-    teacher_detail_view_link.allow_tags = True
+        return format_html("<a href='%d/school_detail_view' data-toggle='modal' class='modal-click' data-target='.full-content-slider', data-title='%s %s'>%s %s</a>" % (obj.id, obj.first_name, obj.last_name, obj.first_name, obj.last_name))
         
     def get_urls(self):
 

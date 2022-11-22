@@ -5,6 +5,7 @@ from django.contrib.auth.models import Group
 from django.template.loader import render_to_string
 from django.shortcuts import render
 from django.urls import path, re_path
+from django.utils.html import format_html
 
 
 class ParentForm(forms.ModelForm):
@@ -98,8 +99,7 @@ class ParentAdmin(admin.ModelAdmin):
     edit_parent_link.allow_tags = True
     
     def parent_detail_view_link(self, obj):
-        return u"<a href='%d/parent_detail_view' class='modal-click' data-toggle='modal' data-target='.full-content-slider' data-title='%s %s'>%s</a>" % (obj.id, obj.first_name, obj.last_name, obj.first_name)
-    parent_detail_view_link.short_description = "First Name"
+        return format_html("<a href='%d/parent_detail_view' class='modal-click' data-toggle='modal' data-target='.full-content-slider' data-title='%s %s'>%s</a>" % (obj.id, obj.first_name, obj.last_name, obj.first_name))
     parent_detail_view_link.allow_tags = True
     
     def get_urls(self):
