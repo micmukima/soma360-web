@@ -9,9 +9,9 @@ from parent.models import Parent
 
 
 class Student(models.Model):
-    firstname = models.CharField('First Name', max_length=255, blank=False)
-    middlename = models.CharField('Middle Name', max_length=255, blank=False)
-    lastname = models.CharField('Last Name', max_length=255, blank=False)
+    first_name = models.CharField('First Name', max_length=255, blank=False)
+    middle_name = models.CharField('Middle Name', max_length=255, blank=False)
+    last_name = models.CharField('Last Name', max_length=255, blank=False)
     parent_1 = models.ForeignKey(Parent, on_delete=models.PROTECT, related_name="parent_1", blank=False)
     parent_2 = models.ForeignKey(Parent, on_delete=models.PROTECT, related_name="parent_2", blank=True, null=True)
     address = models.TextField('Address', max_length=255, blank=False)
@@ -29,7 +29,7 @@ class Student(models.Model):
        
     @property 
     def student_names(self):
-        return "%s %s %s" %(self.firstname, self.middlename, self.lastname)
+        return "%s %s %s" %(self.first_name, self.middle_name, self.last_name)
         
     def save(self, * args, ** kwargs):    
         if not self.registration_number:
@@ -42,10 +42,10 @@ class Student(models.Model):
         default_permissions = ('add', 'change', 'delete', 'view')
 
     def __str__(self):
-        return "%s %s %s" %(self.firstname, self.middlename, self.lastname)
+        return "%s %s %s" %(self.first_name, self.middle_name, self.last_name)
 
     def __unicode__(self):
-        return "%s %s %s" %(self.firstname, self.middlename, self.lastname)
+        return "%s %s %s" %(self.first_name, self.middle_name, self.last_name)
         
 class StudentBulkAdmit(Student): # mass import from excel
     class Meta:

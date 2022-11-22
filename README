@@ -1,6 +1,3 @@
-# soma360-web
-Back-end Dashboard and API's
-
 To run migrations
 python manage.py migrate 
 

@@ -31,7 +31,7 @@ class StudentAdmin(admin.ModelAdmin):
     
     fieldsets = [
         (None, {
-            'fields': ['firstname', 'middlename', 'lastname', 'parent_1', 
+            'fields': ['first_name', 'middle_name', 'last_name', 'parent_1', 
                 'parent_2', 'address', 'date_registered', 'current_class', 
                 'current_section', 'current_academic_year', 'photo']
         })
@@ -41,8 +41,8 @@ class StudentAdmin(admin.ModelAdmin):
         'student_names', 'parent_1', 'parent_2', 'current_class', 
         'current_section', 'current_academic_year', 'edit_student_link')
     list_filter = ('date_registered', ClassSubjectClassesListFilter, ClassSubjectSectionListFilter, AcademicYearListFilter)
-    search_fields = ('firstname', 'middlename', 'lastname', 'parent_1__firstname', 'parent_1__lastname', 
-        'parent_2__firstname', 'parent_2__lastname', 'parent_1__contact_phone', 'parent_2__contact_phone', 
+    search_fields = ('first_name', 'middle_name', 'last_name', 'parent_1__first_name', 'parent_1__last_name', 
+        'parent_2__first_name', 'parent_2__last_name', 'parent_1__contact_phone', 'parent_2__contact_phone', 
         'address', 'registration_number')
     
     def formfield_for_foreignkey(self, db_field, request=None, **kwargs):
@@ -79,7 +79,7 @@ class StudentAdmin(admin.ModelAdmin):
     student_photo_inline.short_description = "Photo"
     
     def student_names(self, obj):
-        return u"%s %s %s" % (obj.firstname, obj.middlename, obj.lastname)
+        return u"%s %s %s" % (obj.first_name, obj.middle_name, obj.last_name)
     student_names.short_description = 'Student Names'
     student_names.allow_tags = True
     
@@ -100,12 +100,12 @@ class StudentAdmin(admin.ModelAdmin):
                 </li>
               </ul>
             </div>
-        """ %(obj.firstname, obj.middlename, obj.lastname, obj.id, obj.id, obj.firstname, obj.middlename, obj.lastname, obj.id)
+        """ %(obj.first_name, obj.middle_name, obj.last_name, obj.id, obj.id, obj.first_name, obj.middle_name, obj.last_name, obj.id)
     edit_student_link.short_description = 'Actions'
     edit_student_link.allow_tags = True
     
     def student_detail_view_link(self, obj):
-        return u"<a href='%d/student_detail_view' data-toggle='modal' class='modal-click' data-target='.full-content-slider' data-title='%s %s %s'>%s</a>" % (obj.id, obj.firstname, obj.middlename, obj.lastname, obj.registration_number)
+        return u"<a href='%d/student_detail_view' data-toggle='modal' class='modal-click' data-target='.full-content-slider' data-title='%s %s %s'>%s</a>" % (obj.id, obj.first_name, obj.middle_name, obj.last_name, obj.registration_number)
     student_detail_view_link.short_description = "Reg. Number"
     student_detail_view_link.allow_tags = True
     
@@ -220,7 +220,7 @@ class StudentPromotionAdmin(admin.ModelAdmin):
     
     list_display = ('student', 'from_class', 'to_class', 'from_section', 'to_section', 'from_academic_year', 'to_academic_year', 'promoted_by', 'date_promoted')
     list_filter = (PromotionFromClassesListFilter, PromotionToClassesListFilter, 'date_promoted')
-    search_fields = ('student__firstname', 'student__middlename', 'student__lastname', \
+    search_fields = ('student__first_name', 'student__middle_name', 'student__last_name', \
         'from_class__name', 'to_class__name', 'from_academic_year__numeric_year', 'to_academic_year__numeric_year', 'from_section__name', 'to_section__name') 
     
     def get_urls(self):
@@ -240,8 +240,9 @@ class StudentPromotionAdmin(admin.ModelAdmin):
         return urls + super_urls
         
     def promote_students(self, request, form_url='', extra_context=None):
+        pass
         opts = Student._meta     
-        from tal_utils.functions import user_is_teacher
+        from app_utils.functions import user_is_teacher
         class_sections = ClassSubject.objects.filter(school_class__school = request.user.school)
         
         classes = {}
@@ -269,8 +270,7 @@ class StudentPromotionAdmin(admin.ModelAdmin):
             current_class = request.POST.get('current_class')  
             current_academic_year = request.POST.get('current_academic_year')
             students = Student.objects.filter(school = request.user.school, current_class_id = current_class, current_section_id = current_section, current_academic_year = current_academic_year)
-            """if current_section:
-                students = students.filter(current_section_id = current_section) """
+            
         except Student.DoesNotExist:
             students = None
             
@@ -351,7 +351,7 @@ class StudentBulkAdmitAdmin(admin.ModelAdmin):
 
     form = BatchUploadForm
         
-    list_display = ('firstname', 'middlename', 'lastname', 'parent_1', 'current_class', 'current_section')
+    list_display = ('first_name', 'middle_name', 'last_name', 'parent_1', 'current_class', 'current_section')
         
     list_filter = (ClassesListFilter, SectionListFilter)
     
@@ -384,8 +384,8 @@ class StudentBulkAdmitAdmin(admin.ModelAdmin):
                 parent_group = Group.objects.get(name='Parent')
                 for conter, line in enumerate(reader, 1):                    
                     parent_1, created = Parent.objects.get_or_create(
-                        firstname = line['Parent 1 First Name'],
-                        lastname = line['Parent 1 Last Name'],
+                        first_name = line['Parent 1 First Name'],
+                        last_name = line['Parent 1 Last Name'],
                         contact_phone = clean_mobile_number(line['Parent 1 Mobile Number']),
                         username = clean_mobile_number(line['Parent 1 Mobile Number']),
                         school = request.user.school,                        
@@ -394,8 +394,8 @@ class StudentBulkAdmitAdmin(admin.ModelAdmin):
                         parent_1.groups.add(parent_group)
                                         
                     parent_2, created = Parent.objects.get_or_create(
-                        firstname = line['Parent 2 First Name'],
-                        lastname = line['Parent 2 Last Name'],
+                        first_name = line['Parent 2 First Name'],
+                        last_name = line['Parent 2 Last Name'],
                         contact_phone = clean_mobile_number(line['Parent 2 Mobile Number']),
                         username = clean_mobile_number(line['Parent 2 Mobile Number']),
                         school = request.user.school,                        
@@ -405,9 +405,9 @@ class StudentBulkAdmitAdmin(admin.ModelAdmin):
                       
                     student, created = Student.objects.get_or_create(
                         school = request.user.school,                        
-                        firstname = line['First Name'],
-                        middlename = line['Middle Name'],
-                        lastname = line['Last Name'],
+                        first_name = line['First Name'],
+                        middle_name = line['Middle Name'],
+                        last_name = line['Last Name'],
                         address = line['Address'],
                         current_class = current_class,
                         current_section = current_section,

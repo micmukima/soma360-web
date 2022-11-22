@@ -4,8 +4,8 @@ from school.models import Subject, ClassSubject, SchoolTerm
 from django.conf import settings
 
 def user_is_teacher(current_user):
-    user_groups = current_user.groups.values_list('name',flat=True)
-    return settings.TEACHER_GROUP_NAME in user_groups
+    #user_groups = current_user.groups.values_list('name',flat=True)
+    return False#settings.TEACHER_GROUP_NAME in user_groups
     
 def clean_mobile_number(mobile_number):
     if not mobile_number:

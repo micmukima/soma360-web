@@ -38,7 +38,7 @@ class ParentAdmin(admin.ModelAdmin):
       
     fieldsets = [
         ('Personal Information', {
-            'fields': ['firstname', 'lastname', 'email', 'contact_phone', 'gender', 'address', 'profession', 'profile_picture']
+            'fields': ['first_name', 'last_name', 'email', 'date_of_birth', 'contact_phone', 'gender', 'address', 'profession', 'profile_picture']
         }),
         ('Login Details', {
             'classes': ('wide',),
@@ -51,9 +51,9 @@ class ParentAdmin(admin.ModelAdmin):
         
     ]   
     
-    list_display = ('parent_photo_inline', 'parent_detail_view_link', 'lastname', 'email', 'contact_phone', 'address', 'date_registered', 'edit_parent_link')
+    list_display = ('parent_photo_inline', 'parent_detail_view_link','first_name' , 'last_name', 'email', 'contact_phone', 'address', 'date_registered', 'edit_parent_link')
     list_filter = ('date_registered',)
-    search_fields = ('firstname', 'lastname', 'email', 'contact_phone', 'address', 'profession') 
+    search_fields = ('first_name', 'last_name', 'email', 'contact_phone', 'address', 'profession') 
     
     def get_queryset(self, request):
         qs = super(ParentAdmin, self).get_queryset(request)
@@ -68,9 +68,9 @@ class ParentAdmin(admin.ModelAdmin):
         obj.school = request.user.school
         obj.save()
         
-        if not change: # set group on first create parent
+        """if not change: # set group on first create parent
             group = Group.objects.get(name='Parent')
-            obj.groups.add(group)
+            obj.groups.add(group)"""
         
     def parent_photo_inline(self, obj):
         if obj.profile_picture:
@@ -93,12 +93,12 @@ class ParentAdmin(admin.ModelAdmin):
                 </li>
               </ul>
             </div>
-        """ %(obj.id, obj.firstname, obj.lastname, obj.id)
+        """ %(obj.id, obj.first_name, obj.last_name, obj.id)
     edit_parent_link.short_description = 'Actions'
     edit_parent_link.allow_tags = True
     
     def parent_detail_view_link(self, obj):
-        return u"<a href='%d/parent_detail_view' class='modal-click' data-toggle='modal' data-target='.full-content-slider' data-title='%s %s'>%s</a>" % (obj.id, obj.firstname, obj.lastname, obj.firstname)
+        return u"<a href='%d/parent_detail_view' class='modal-click' data-toggle='modal' data-target='.full-content-slider' data-title='%s %s'>%s</a>" % (obj.id, obj.first_name, obj.last_name, obj.first_name)
     parent_detail_view_link.short_description = "First Name"
     parent_detail_view_link.allow_tags = True
     

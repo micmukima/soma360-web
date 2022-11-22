@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 
-from app_core.models import User, UserManager
+from app_core.models import User
 
 class Teacher(User):
     class Meta:
@@ -10,7 +10,7 @@ class Teacher(User):
         default_permissions = ('add', 'change', 'delete', 'view')
 
     def __str__(self):
-        return "%s %s" %(self.firstname, self.lastname)
+        return "%s %s" %(self.first_name, self.last_name)
 
     def __unicode__(self):
-        return "%s %s" %(self.firstname, self.lastname)
+        return "%s %s" %(self.first_name, self.last_name)

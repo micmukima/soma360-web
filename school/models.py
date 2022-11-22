@@ -8,6 +8,7 @@ from django.conf import settings
 from tinymce import models as tinymce_models
 from student.models import Student
 from parent.models import Parent
+from functools import reduce
 
 SCHOOL_TYPES = (
     ('primary', "Primary School"), 
